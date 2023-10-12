@@ -50,6 +50,11 @@ func (n *Node) Open(ctx context.Context, flags uint32) (fh fs.FileHandle, fuseFl
 		errno = fs.ToErrno(err)
 		return
 	}
+
+	if c, ok := ctx.(*fuse.Context); ok {
+		Tracef(Of("open"), "Open %q, pid: %d, uid: %d, gid: %d", cName, c.Pid, c.Uid, c.Gid)
+	}
+
 	fh, _, errno = NewFile(fd, cName, rn)
 	return fh, fuseFlags, errno
 }
